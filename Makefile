@@ -3,20 +3,26 @@ QEMU = /usr/bin/qemu-system-arm
 CC = /usr/bin/arm-linux-gnueabi-gcc
 LD = /usr/bin/arm-linux-gnueabi-ld
 OBJCOPY = /usr/bin/arm-linux-gnueabi-objcopy
+OBJDUMP = /usr/bin/arm-linux-gnueabi-objdump
 RM = /bin/rm -fr
 
-ELF = rasp_emu_hello_world.elf
-IMG = rasp_emu_hello_world.img
+PRJ_NAME = rasp_emu_hello_world
+ELF = $(PRJ_NAME).elf
+IMG = $(PRJ_NAME).img
+DMP = $(PRJ_NAME).dmp
 STARTUP = crt0.S
 
 OBJS = $(STARTUP:.S=.o)
 
 CFLAGS = -O2 -Wall -nostdinc -fno-builtin
 
-all: $(IMG)
+all: $(IMG) $(DMP)
 
 $(ELF): $(OBJS)
 	$(LD) -static -nostdlib -T rasp_emu_hello_world.ld $^ -o $@
+
+$(DMP): $(ELF)
+	$(OBJDUMP) -D $^ > $@
 
 .SUFFIXES: .elf .img
 
@@ -29,4 +35,4 @@ $(ELF): $(OBJS)
 .PHONY: clean
 
 clean:
-	$(RM) $(OBJS)
+	$(RM) $(OBJS) $(ELF) $(IMG)
