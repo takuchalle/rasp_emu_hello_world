@@ -17,7 +17,7 @@ _clear_bss:
 	mov	r0,	#0x00
 	ldr	r1,	=_bss_start
 	ldr	r2,	=_bss_end
-_keeep_clearing:	
+_keep_clearing:	
 	str	r0,	[r1, #0x00]
 	add	r1,	#0x04
 	cmp	r1,	r2
