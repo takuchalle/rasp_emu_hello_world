@@ -30,7 +30,7 @@ INC = -Iinclude
 all: $(IMG) $(DMP)
 
 run: $(IMG)
-	$(QEMU) $(QEMU_OPT) -kernel $^
+	export QEMU_AUDIO_DRV=none; $(QEMU) $(QEMU_OPT) -kernel $^
 
 $(ELF): $(OBJS)
 	$(LD) -static -nostdlib -T rasp_emu_hello_world.ld $^ -o $@
