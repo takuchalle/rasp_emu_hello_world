@@ -7,19 +7,16 @@ _start:
 	msr	cpsr, r0
 	ldr	sp, =0x06400000
 
-//	bl	main
-	bl	_clear_bss
+	ldr	r1,	=_bss_start
+	ldr	r2,	=_bss_end
+	mov	r3,	#0x00
+_clear_bss:
+	cmp	r1,r2
+	strne 	r3,[r1],#+4
+	bne 	_clear_bss
 	
+	bl	main
+
 	// infinit loop
 	b	.
 
-_clear_bss:
-	mov	r0,	#0x00
-	ldr	r1,	=_bss_start
-	ldr	r2,	=_bss_end
-_keep_clearing:	
-	str	r0,	[r1, #0x00]
-	add	r1,	#0x04
-	cmp	r1,	r2
-	bne	_keep_clearing
-	bx	lr
